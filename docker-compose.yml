@@ -17,6 +17,13 @@ x-minio-common: &minio-common
     retries: 3
 
 services:
+  mlflow-ui:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "5000:5000"
+
   # postgres db
   db:
     image: postgres
@@ -32,7 +39,7 @@ services:
     volumes:
       - /mlflow_postgres_data:/var/lib/postgresql/data
 
-  # starts 4 docker containers running minio server instances.
+  # starts 2 docker containers running minio server instances.
   # using nginx reverse proxy, load balancing, you can access
   # it through port 9000.
   minio1:
