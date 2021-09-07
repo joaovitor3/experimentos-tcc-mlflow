@@ -29,8 +29,18 @@ def eval_metrics(actual, pred):
 
 
 if __name__ == "__main__":
+
     warnings.filterwarnings("ignore")
     np.random.seed(40)
+
+    # Set mlflow config
+    os.environ['MLFLOW_TRACKING_URI'] = 'postgresql://postgres:postgres@localhost/mlflow'
+    os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://localhost:9000'
+    os.environ['AWS_ACCESS_KEY_ID'] = 'mlflow-integration-access-key'
+    os.environ['AWS_SECRET_ACCESS_KEY'] = 'mlflow-integration-secret-key'
+
+    #mlflow.create_experiment('exp', artifact_location='s3://mlflow')
+    mlflow.set_experiment('exp')
 
     # Read the wine-quality csv file from the URL
     csv_url = (
@@ -75,7 +85,8 @@ if __name__ == "__main__":
         mlflow.log_metric("mae", mae)
 
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
-
+        print(f'Tracking URL type {tracking_url_type_store}, {mlflow.get_tracking_uri()}')
+        print(f'Artifact URI {mlflow.get_artifact_uri()}')
         # Model registry does not work with file store
         if tracking_url_type_store != "file":
 
@@ -83,6 +94,9 @@ if __name__ == "__main__":
             # There are other ways to use the Model Registry, which depends on the use case,
             # please refer to the doc for more information:
             # https://mlflow.org/docs/latest/model-registry.html#api-workflow
-            mlflow.sklearn.log_model(lr, "model", registered_model_name="ElasticnetWineModel")
+            mlflow.sklearn.log_model(lr, "model", registered_model_name=f"ElasticnetWineModel")
+
+            #date_now = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            #mlflow.sklearn.log_model(lr, "model", registered_model_name=f"ElasticnetWineModel-{date_now}")
         else:
             mlflow.sklearn.log_model(lr, "model")
