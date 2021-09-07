@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def eval_metrics(actual, pred):
-    rmse = np.sqrt(mean_squared_error(actual, pred))
+    rmse = np.sqrt(mean_squared_error(actual, pred)) # https://stackoverflow.com/questions/57348495/what-is-the-good-rmse-root-mean-square-error-value-range-to-justify-the-effici
     mae = mean_absolute_error(actual, pred) # MAE output is non-negative floating point. The best value is 0.0. https://scikit-learn.org/stable/modules/generated/sklearn.metrics.mean_absolute_error.html
     r2 = r2_score(actual, pred) # Best possible score is 1.0 https://scikit-learn.org/stable/modules/generated/sklearn.metrics.r2_score.html
     return rmse, mae, r2
