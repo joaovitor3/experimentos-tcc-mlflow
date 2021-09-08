@@ -21,8 +21,14 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
+    env_file:
+      - ./env/.env
+    networks:
+      - metaflow
     ports:
       - "5000:5000"
+    volumes:
+      - ./examples:/usr/src/app/examples/
 
   # postgres db
   db:
@@ -36,6 +42,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - metaflow
     volumes:
       - /mlflow_postgres_data:/var/lib/postgresql/data
 
@@ -45,6 +53,8 @@ services:
   minio1:
     <<: *minio-common
     hostname: minio1
+    networks:
+      - metaflow
     volumes:
       - data1-1:/data1
       - data1-2:/data2
@@ -52,6 +62,8 @@ services:
   minio2:
     <<: *minio-common
     hostname: minio2
+    networks:
+      - metaflow
     volumes:
       - data2-1:/data1
       - data2-2:/data2
@@ -64,6 +76,8 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+    networks:
+      - metaflow
     depends_on:
       - minio1
       - minio2
@@ -75,3 +89,8 @@ volumes:
   data1-2:
   data2-1:
   data2-2:
+
+networks:
+  metaflow:
+    driver: "bridge"
+    name: metaflow

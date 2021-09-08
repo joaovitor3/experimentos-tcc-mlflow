@@ -33,12 +33,6 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
 
-    # Set mlflow config
-    os.environ['MLFLOW_TRACKING_URI'] = 'postgresql://postgres:postgres@localhost/mlflow'
-    os.environ['MLFLOW_S3_ENDPOINT_URL'] = 'http://localhost:9000'
-    os.environ['AWS_ACCESS_KEY_ID'] = 'mlflow-integration-access-key'
-    os.environ['AWS_SECRET_ACCESS_KEY'] = 'mlflow-integration-secret-key'
-
     #mlflow.create_experiment('exp', artifact_location='s3://mlflow')
     mlflow.set_experiment('exp')
 
