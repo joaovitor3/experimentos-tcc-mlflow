@@ -33,7 +33,11 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
 
-    #mlflow.create_experiment('exp', artifact_location='s3://mlflow')
+    try:
+        mlflow.create_experiment('exp', artifact_location='s3://mlflow')
+    except Exception:
+        print('Experimento já existente')
+
     mlflow.set_experiment('exp')
 
     # Read the wine-quality csv file from the URL
